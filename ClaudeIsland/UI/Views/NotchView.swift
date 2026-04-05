@@ -178,9 +178,13 @@ struct NotchView: View {
                             isHovering = hovering
                         }
                     }
-                    .onTapGesture {
+                    .overlay {
                         if viewModel.status != .opened {
-                            viewModel.notchOpen(reason: .click)
+                            Color.clear
+                                .contentShape(Rectangle())
+                                .onTapGesture {
+                                    viewModel.notchOpen(reason: .click)
+                                }
                         }
                     }
             }

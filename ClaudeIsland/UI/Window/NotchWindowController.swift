@@ -66,19 +66,20 @@ class NotchWindowController: NSWindowController {
         // - Opened: ignoresMouseEvents = false (buttons inside panel work)
         viewModel.$status
             .receive(on: DispatchQueue.main)
-            .sink { [weak notchWindow, weak viewModel] status in
+            .sink { [weak self, weak viewModel] status in
+                guard let window = self?.window as? NotchPanel else { return }
                 switch status {
                 case .opened:
                     // Accept mouse events when opened so buttons work
-                    notchWindow?.ignoresMouseEvents = false
+                    window.ignoresMouseEvents = false
                     // Don't steal focus when opened by notification (task finished)
                     if viewModel?.openReason != .notification {
                         NSApp.activate(ignoringOtherApps: false)
-                        notchWindow?.makeKey()
+                        window.makeKey()
                     }
                 case .closed, .popping:
                     // Ignore mouse events when closed so clicks pass through
-                    notchWindow?.ignoresMouseEvents = true
+                    window.ignoresMouseEvents = true
                 }
             }
             .store(in: &cancellables)
