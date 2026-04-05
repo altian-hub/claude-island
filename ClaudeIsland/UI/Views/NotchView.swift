@@ -519,7 +519,7 @@ struct NotchView: View {
 
         viewModel.notchOpen(reason: .notification)
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5.0) {
             // Only auto-close if still opened by notification and user hasn't interacted
             if viewModel.status == .opened && viewModel.openReason == .notification {
                 viewModel.notchClose()
