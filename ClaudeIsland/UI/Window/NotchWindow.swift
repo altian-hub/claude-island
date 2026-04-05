@@ -67,6 +67,11 @@ class NotchPanel: NSPanel {
     // MARK: - Click-through for areas outside the panel content
 
     override func sendEvent(_ event: NSEvent) {
+        // Make panel key on first click so SwiftUI buttons respond immediately
+        if (event.type == .leftMouseDown || event.type == .rightMouseDown) && !isKeyWindow {
+            makeKey()
+        }
+
         // For mouse events, check if we should pass through
         if event.type == .leftMouseDown || event.type == .leftMouseUp ||
            event.type == .rightMouseDown || event.type == .rightMouseUp {

@@ -20,6 +20,11 @@ class PassThroughHostingView<Content: View>: NSHostingView<Content> {
         }
         return super.hitTest(point)
     }
+
+    /// Allow clicks to register without requiring window activation first.
+    override func acceptsFirstMouse(for event: NSEvent?) -> Bool {
+        true
+    }
 }
 
 class NotchViewController: NSViewController {

@@ -448,26 +448,28 @@ struct MenuRow: View {
     @State private var isHovered = false
 
     var body: some View {
-        HStack(spacing: 10) {
-            Image(systemName: icon)
-                .font(.system(size: 12))
-                .foregroundColor(textColor)
-                .frame(width: 16)
+        Button(action: action) {
+            HStack(spacing: 10) {
+                Image(systemName: icon)
+                    .font(.system(size: 12))
+                    .foregroundColor(textColor)
+                    .frame(width: 16)
 
-            Text(label)
-                .font(.system(size: 13, weight: .medium))
-                .foregroundColor(textColor)
+                Text(label)
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundColor(textColor)
 
-            Spacer()
+                Spacer()
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 10)
+            .background(
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(isHovered ? Color.white.opacity(0.08) : Color.clear)
+            )
+            .contentShape(Rectangle())
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 10)
-        .background(
-            RoundedRectangle(cornerRadius: 8)
-                .fill(isHovered ? Color.white.opacity(0.08) : Color.clear)
-        )
-        .contentShape(Rectangle())
-        .onTapGesture { action() }
+        .buttonStyle(.plain)
         .onHover { isHovered = $0 }
     }
 
@@ -488,34 +490,36 @@ struct MenuToggleRow: View {
     @State private var isHovered = false
 
     var body: some View {
-        HStack(spacing: 10) {
-            Image(systemName: icon)
-                .font(.system(size: 12))
-                .foregroundColor(textColor)
-                .frame(width: 16)
+        Button(action: action) {
+            HStack(spacing: 10) {
+                Image(systemName: icon)
+                    .font(.system(size: 12))
+                    .foregroundColor(textColor)
+                    .frame(width: 16)
 
-            Text(label)
-                .font(.system(size: 13, weight: .medium))
-                .foregroundColor(textColor)
+                Text(label)
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundColor(textColor)
 
-            Spacer()
+                Spacer()
 
-            Circle()
-                .fill(isOn ? TerminalColors.green : Color.white.opacity(0.3))
-                .frame(width: 6, height: 6)
+                Circle()
+                    .fill(isOn ? TerminalColors.green : Color.white.opacity(0.3))
+                    .frame(width: 6, height: 6)
 
-            Text(isOn ? "On" : "Off")
-                .font(.system(size: 11))
-                .foregroundColor(.white.opacity(0.4))
+                Text(isOn ? "On" : "Off")
+                    .font(.system(size: 11))
+                    .foregroundColor(.white.opacity(0.4))
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 10)
+            .background(
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(isHovered ? Color.white.opacity(0.08) : Color.clear)
+            )
+            .contentShape(Rectangle())
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 10)
-        .background(
-            RoundedRectangle(cornerRadius: 8)
-                .fill(isHovered ? Color.white.opacity(0.08) : Color.clear)
-        )
-        .contentShape(Rectangle())
-        .onTapGesture { action() }
+        .buttonStyle(.plain)
         .onHover { isHovered = $0 }
     }
 
