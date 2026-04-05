@@ -26,6 +26,7 @@ struct NotchView: View {
     @State private var isVisible: Bool = false
     @State private var isHovering: Bool = false
     @State private var isBouncing: Bool = false
+    @State private var permissionPopupIds: Set<String> = []
 
     @Namespace private var activityNamespace
 
@@ -206,8 +207,12 @@ struct NotchView: View {
             handlePendingSessionsChange(sessions)
         }
         .onChange(of: sessionMonitor.instances) { _, instances in
+            if viewModel.sessionCount != instances.count {
+                viewModel.sessionCount = instances.count
+            }
             handleProcessingChange()
             handleWaitingForInputChange(instances)
+            handlePermissionPopup(instances)
         }
     }
 
@@ -498,8 +503,30 @@ struct NotchView: View {
         previousWaitingForInputIds = currentIds
     }
 
-    /// Determine if notification sound should play for the given sessions
-    /// Returns true if ANY session is not actively focused
+    private func handlePermissionPopup(_ instances: [SessionState]) {
+        let approvalSessions = instances.filter { $0.phase.isWaitingForApproval }
+        let currentIds = Set(approvalSessions.map { $0.stableId })
+        let newIds = currentIds.subtracting(permissionPopupIds)
+
+        // Clean up ids for sessions no longer waiting
+        permissionPopupIds = permissionPopupIds.intersection(currentIds)
+
+        guard !newIds.isEmpty else { return }
+        permissionPopupIds.formUnion(newIds)
+
+        // Only pop if currently closed
+        guard viewModel.status == .closed else { return }
+
+        viewModel.notchOpen(reason: .notification)
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+            // Only auto-close if still opened by notification and user hasn't interacted
+            if viewModel.status == .opened && viewModel.openReason == .notification {
+                viewModel.notchClose()
+            }
+        }
+    }
+
     private func shouldPlayNotificationSound(for sessions: [SessionState]) async -> Bool {
         for session in sessions {
             guard let pid = session.pid else {
