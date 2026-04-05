@@ -16,10 +16,11 @@ struct NotchGeometry: Sendable {
 
     /// The notch rect in screen coordinates (for hit testing with global mouse position)
     var notchScreenRect: CGRect {
-        CGRect(
-            x: screenRect.midX - deviceNotchRect.width / 2,
+        let widthExtension: CGFloat = 20
+        return CGRect(
+            x: screenRect.midX - (deviceNotchRect.width + widthExtension) / 2,
             y: screenRect.maxY - deviceNotchRect.height,
-            width: deviceNotchRect.width,
+            width: deviceNotchRect.width + widthExtension,
             height: deviceNotchRect.height
         )
     }

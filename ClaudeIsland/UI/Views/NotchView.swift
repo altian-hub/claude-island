@@ -58,7 +58,7 @@ struct NotchView: View {
 
     private var closedNotchSize: CGSize {
         CGSize(
-            width: viewModel.deviceNotchRect.width,
+            width: viewModel.deviceNotchRect.width + 20,
             height: viewModel.deviceNotchRect.height
         )
     }
