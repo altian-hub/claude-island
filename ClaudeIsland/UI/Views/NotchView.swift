@@ -222,6 +222,17 @@ struct NotchView: View {
         isProcessing || hasPendingPermission || hasWaitingForInput
     }
 
+    private var crabColor: Color {
+        if hasPendingPermission {
+            return TerminalColors.amber
+        } else if isProcessing {
+            return TerminalColors.blue
+        } else if hasWaitingForInput {
+            return TerminalColors.green
+        }
+        return TerminalColors.prompt
+    }
+
     @ViewBuilder
     private var notchLayout: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -249,16 +260,17 @@ struct NotchView: View {
 
     @ViewBuilder
     private var headerRow: some View {
+        let stateColor = crabColor
         HStack(spacing: 0) {
             // Left side - crab + optional permission indicator (visible when processing, pending, or waiting for input)
             if showClosedActivity {
                 HStack(spacing: 4) {
-                    ClaudeCrabIcon(size: 14, animateLegs: isProcessing)
+                    ClaudeCrabIcon(size: 14, color: stateColor, animateLegs: isProcessing)
                         .matchedGeometryEffect(id: "crab", in: activityNamespace, isSource: showClosedActivity)
 
                     // Permission indicator only (amber) - waiting for input shows checkmark on right
                     if hasPendingPermission {
-                        PermissionIndicatorIcon(size: 14, color: Color(red: 0.85, green: 0.47, blue: 0.34))
+                        PermissionIndicatorIcon(size: 14, color: TerminalColors.prompt)
                             .matchedGeometryEffect(id: "status-indicator", in: activityNamespace, isSource: showClosedActivity)
                     }
                 }
@@ -285,11 +297,10 @@ struct NotchView: View {
             // Right side - spinner when processing/pending, checkmark when waiting for input
             if showClosedActivity {
                 if isProcessing || hasPendingPermission {
-                    ProcessingSpinner()
+                    ProcessingSpinner(color: stateColor)
                         .matchedGeometryEffect(id: "spinner", in: activityNamespace, isSource: showClosedActivity)
                         .frame(width: viewModel.status == .opened ? 20 : sideWidth)
                 } else if hasWaitingForInput {
-                    // Checkmark for waiting-for-input on the right side
                     ReadyForInputIndicatorIcon(size: 14, color: TerminalColors.green)
                         .matchedGeometryEffect(id: "spinner", in: activityNamespace, isSource: showClosedActivity)
                         .frame(width: viewModel.status == .opened ? 20 : sideWidth)
