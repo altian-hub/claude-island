@@ -369,15 +369,12 @@ struct UpdateRow: View {
 // MARK: - Accessibility Permission Row
 
 struct AccessibilityRow: View {
-    let isEnabled: Bool
+    @State private var isEnabled: Bool
 
     @State private var isHovered = false
-    @State private var refreshTrigger = false
 
-    private var currentlyEnabled: Bool {
-        // Re-check on each render when refreshTrigger changes
-        _ = refreshTrigger
-        return isEnabled
+    init(isEnabled: Bool) {
+        _isEnabled = State(initialValue: isEnabled)
     }
 
     var body: some View {
@@ -424,7 +421,10 @@ struct AccessibilityRow: View {
         )
         .onHover { isHovered = $0 }
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.didBecomeActiveNotification)) { _ in
-            refreshTrigger.toggle()
+            isEnabled = AXIsProcessTrusted()
+        }
+        .onReceive(Timer.publish(every: 2, on: .main, in: .common).autoconnect()) { _ in
+            isEnabled = AXIsProcessTrusted()
         }
     }
 
