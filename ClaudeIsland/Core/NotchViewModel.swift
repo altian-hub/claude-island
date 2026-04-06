@@ -75,7 +75,7 @@ class NotchViewModel: ObservableObject {
             // Compact size for settings menu
             return CGSize(
                 width: min(screenRect.width * 0.4, 480),
-                height: 432 + screenSelector.expandedPickerHeight + soundSelector.expandedPickerHeight
+                height: 392 + screenSelector.expandedPickerHeight + soundSelector.expandedPickerHeight
             )
         case .instances:
             let rowHeight: CGFloat = 48

@@ -298,7 +298,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.0.1;
+				MARKETING_VERSION = 0.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.celestial.ClaudeIsland;
 				PRODUCT_NAME = "Claude Island";
 				REGISTER_APP_GROUPS = YES;
@@ -334,7 +334,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 0.0.1;
+				MARKETING_VERSION = 0.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.celestial.ClaudeIsland;
 				PRODUCT_NAME = "Claude Island";
 				REGISTER_APP_GROUPS = YES;
